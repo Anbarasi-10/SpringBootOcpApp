@@ -13,6 +13,6 @@ spec:
     spec:
       containers:
         - name: my-spring-app
-          image: "image-registry.openshift-image-registry.svc:5000/my-project/my-spring-app"
+          image: docker.io/learnocp1/demoocp:v2
           ports:
             - containerPort: 8080
