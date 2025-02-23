@@ -1,10 +1,10 @@
-apiVersion: apps/v1
-kind: Route
-metadata:
-  name: my-spring-app
-spec:
-  to:
-    kind: Service
-    name: my-spring-app
-  port:
-    targetPort: 8080
+# apiVersion: apps/v1
+# kind: Route
+# metadata:
+#   name: my-spring-app
+# spec:
+#   to:
+#     kind: Service
+#     name: my-spring-app
+#   port:
+#     targetPort: 8080
