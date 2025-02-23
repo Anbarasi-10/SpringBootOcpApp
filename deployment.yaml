@@ -1,19 +1,18 @@
 apiVersion: apps/v1
 kind: Deployment
 metadata:
-  name: spring-boot-demo
+  name: my-spring-app
 spec:
-  replicas: 1
+  replicas: 2
   selector:
-    matchLabels:
-      app: spring-boot-demo
+    app: my-spring-app
   template:
     metadata:
       labels:
-        app: spring-boot-demo
+        app: my-spring-app
     spec:
       containers:
-        - name: spring-boot-demo
-          image: learnocp1/ocpprojects:v1
+        - name: my-spring-app
+          image: "image-registry.openshift-image-registry.svc:5000/my-project/my-spring-app"
           ports:
             - containerPort: 8080
