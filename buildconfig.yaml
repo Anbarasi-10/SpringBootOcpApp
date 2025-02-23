@@ -1,0 +1,20 @@
+apiVersion: apps/v1
+kind: BuildConfig
+metadata:
+  name: my-app-build
+  namespace: my-project
+spec:
+  source:
+    type: Git
+    git:
+      uri: "https://github.com/Anbarasi-10/SpringBootOcpApp.git"
+  strategy:
+    type: Source
+    sourceStrategy:
+      from:
+        kind: ImageStreamTag
+        name: "java:23"
+  output:
+    to:
+      kind: ImageStreamTag
+      name: "my-app:latest"
