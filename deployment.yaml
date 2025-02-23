@@ -1,18 +1,18 @@
-apiVersion: apps/v1
-kind: Deployment
-metadata:
-  name: my-spring-app
-spec:
-  replicas: 2
-  selector:
-    app: my-spring-app
-  template:
-    metadata:
-      labels:
-        app: my-spring-app
-    spec:
-      containers:
-        - name: my-spring-app
-          image: docker.io/learnocp1/demoocp:v2
-          ports:
-            - containerPort: 8080
+# apiVersion: apps/v1
+# kind: Deployment
+# metadata:
+#   name: my-spring-app
+# spec:
+#   replicas: 2
+#   selector:
+#     app: my-spring-app
+#   template:
+#     metadata:
+#       labels:
+#         app: my-spring-app
+#     spec:
+#       containers:
+#         - name: my-spring-app
+#           image: docker.io/learnocp1/demoocp:v2
+#           ports:
+#             - containerPort: 8080
