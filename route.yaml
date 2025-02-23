@@ -1,0 +1,8 @@
+apiVersion: apps/v1
+kind: Route
+metadata:
+  name: spring-boot-demo
+spec:
+  to:
+    kind: Service
+    name: spring-boot-demo
