@@ -1,20 +1,90 @@
+# 1️⃣ Build Configuration (BuildConfig) - Builds the Spring Boot app from GitHub
 apiVersion: apps/v1
 kind: BuildConfig
 metadata:
-  name: my-app-build
-  namespace: my-project
+  name: spring-boot-ocp-app-build   # Name of the build configuration
 spec:
   source:
     type: Git
     git:
       uri: "https://github.com/Anbarasi-10/SpringBootOcpApp.git"
   strategy:
-    type: Source
+    type: Source  # Uses Source-to-Image (S2I)
     sourceStrategy:
       from:
         kind: ImageStreamTag
-        name: "java:23"
+        name: "java:23"  # Uses OpenShift's Java 17 S2I builder image
   output:
     to:
       kind: ImageStreamTag
-      name: "my-app:latest"
+      name: "spring-boot-ocp-app:latest"  # Stores the built image in OpenShift
+ 
+---
+# 2️⃣ Image Stream (ImageStream) - Stores the built application image
+apiVersion: image.openshift.io/v1
+kind: ImageStream
+metadata:
+  name: spring-boot-ocp-app  # Name of the ImageStream to store built images
+spec: {}
+ 
+---
+# 3️⃣ Deployment Configuration (DeploymentConfig) - Deploys the app
+apiVersion: apps.openshift.io/v1
+kind: DeploymentConfig
+metadata:
+  name: spring-boot-ocp-app
+spec:
+  replicas: 2  # Number of application pods to run
+  selector:
+    app: spring-boot-ocp-app
+  template:
+    metadata:
+      labels:
+        app: spring-boot-ocp-app  # Labels to match this deployment with the service
+    spec:
+      containers:
+        - name: spring-boot-ocp-app
+          image: "spring-boot-ocp-app:latest"  # Uses the built image from the ImageStream
+          ports:
+            - containerPort: 8080  # The application runs on port 8080
+          env:
+            - name: SPRING_PROFILES_ACTIVE
+              value: "prod"  # Set the Spring Boot profile (optional)
+  triggers:
+    - type: ConfigChange  # Auto-redeploy when configuration changes
+    - type: ImageChange
+      imageChangeParams:
+        automatic: true  # Auto-deploy on new image builds
+        containerNames:
+          - spring-boot-ocp-app
+        from:
+          kind: ImageStreamTag
+          name: "spring-boot-ocp-app:latest"
+ 
+---
+# 4️⃣ Service Configuration (Service) - Creates an internal service
+apiVersion: v1
+kind: Service
+metadata:
+  name: spring-boot-ocp-app-service
+spec:
+  selector:
+    app: spring-boot-ocp-app  # Matches the deployment
+  ports:
+    - protocol: TCP
+      port: 80  # External service port
+      targetPort: 8080  # Maps to the container’s port 8080
+ 
+---
+# 5️⃣ Route Configuration (Route) - Exposes the app to the internet
+apiVersion: route.openshift.io/v1
+kind: Route
+metadata:
+  name: spring-boot-ocp-app-route
+spec:
+  to:
+    kind: Service
+    name: spring-boot-ocp-app-service  # Connects the route to the service
+  port:
+    targetPort: 8080  # Maps to the service's target port
+ 
