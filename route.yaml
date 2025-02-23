@@ -1,8 +1,10 @@
 apiVersion: apps/v1
 kind: Route
 metadata:
-  name: spring-boot-demo
+  name: my-spring-app
 spec:
   to:
     kind: Service
-    name: spring-boot-demo
+    name: my-spring-app
+  port:
+    targetPort: 8080
